@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 public class ChatServer {
@@ -20,6 +21,10 @@ public class ChatServer {
             Socket client = server.accept();
             AcceptClient acceptClient = new AcceptClient(client);
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        ChatServer server = new ChatServer();
     }
 
     class AcceptClient extends Thread {
@@ -41,7 +46,20 @@ public class ChatServer {
 
         public void run() {
             while(true) {
+                try {
+                    String msgFromClient = din.readUTF();
+                    StringTokenizer st = new StringTokenizer(msgFromClient);
+                    String LoginName = st.nextToken();
+                    String MsgType = st.nextToken();
 
+                    for(int i=0; i<ClientSockets.size(); i++) {
+                        Socket pSocket = (Socket) ClientSockets.elementAt(i);
+                        DataOutputStream pOut = new DataOutputStream(pSocket.getOutputStream());
+                        pOut.writeUTF(LoginName + " has logged in.");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
