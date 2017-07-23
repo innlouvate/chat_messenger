@@ -85,9 +85,4 @@ public class ChatClient extends JFrame implements Runnable {
             }
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        ChatClient client = new ChatClient("User1");
-
-    }
 }
