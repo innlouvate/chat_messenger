@@ -1,10 +1,7 @@
 package application;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,6 +21,19 @@ public class ChatClient extends JFrame implements Runnable {
     ChatClient(String login) throws IOException {
         super(login);
         LoginName = login;
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                try {
+                    dout.writeUTF(LoginName + " " + "LOGOUT");
+                    System.exit(1);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
         ta = new JTextArea(18, 50);
         tf = new JTextField(50);
 
